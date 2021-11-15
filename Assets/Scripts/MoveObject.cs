@@ -63,12 +63,13 @@ public class MoveObject : MonoBehaviour
 
             float posXNow = Input.GetTouch(0).position.x - posX;
             float posZNow = Input.GetTouch(0).position.y - posZ;
-            Vector3 curPos = new Vector3(posXNow,dis.y , posZNow);
+            Vector3 curPos = new Vector3(posXNow, dis.y, posZNow);
 
             Vector3 worldPos = cam.ScreenToWorldPoint(curPos) - previousPosition;
-            worldPos = new Vector3(worldPos.x,0.0f , worldPos.z);
+            worldPos = new Vector3(worldPos.x, 0, worldPos.z);
+            toDrag.position = Vector3.Lerp(toDrag.position, worldPos, 0.3f);
 
-            toDragRigidbody.velocity = worldPos / (Time.deltaTime * 10);
+/*            toDragRigidbody.velocity = worldPos / (Time.deltaTime * 10);*/
 
             previousPosition = toDrag.position;
         }
