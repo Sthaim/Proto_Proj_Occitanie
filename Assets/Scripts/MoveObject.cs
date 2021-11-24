@@ -5,12 +5,12 @@ public class MoveObject : MonoBehaviour
 {
     public GameObject spawnobj;
 
-    private Cube selectedCube;
+    public Cube selectedCube;
 
 
     private void OnMouseDown()
     {
-        InvokeRepeating("chiant", 0F, 1F);
+        InvokeRepeating("chiant", 0F, 0.5F);
         
     }
 
@@ -27,7 +27,6 @@ public class MoveObject : MonoBehaviour
 
     IEnumerator launchMove()
     {
-        
         RaycastHit hit;
         if (Physics.Raycast(GetMouseWorldPos().origin, GetMouseWorldPos().direction, out hit))
         {
