@@ -3,39 +3,56 @@ using UnityEngine;
 
 public class MoveObject : MonoBehaviour
 {
+    public GameObject spawnobj;
 
-    public Camera cam;
-    private Vector3 mOffset;
-    private float mZCoord = 0;
+    private Cube selectedCube;
 
 
     private void OnMouseDown()
     {
-        /*mOffset = gameObject.transform.position - GetMouseWorldPos();*/
-        /*mZCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;*/
+        InvokeRepeating("chiant", 0F, 1F);
+        
     }
 
-    private Vector3 GetMouseWorldPos()
+    private void OnMouseUp()
+    {
+        CancelInvoke("chiant");
+        StopCoroutine(launchMove());
+    }
+
+    private void chiant()
+    {
+        StartCoroutine(launchMove());
+    }
+
+    IEnumerator launchMove()
+    {
+        
+        RaycastHit hit;
+        if (Physics.Raycast(GetMouseWorldPos().origin, GetMouseWorldPos().direction, out hit))
+        {
+            if (hit.collider != null && hit.collider.tag == "Plane")
+            {
+                GameObject go = Instantiate(spawnobj, hit.point, Quaternion.identity);
+                selectedCube.addWaypoint(go);
+            }
+        }
+        yield return new WaitForSeconds(2f);
+    }
+
+
+    private Ray GetMouseWorldPos()
     {
         Vector3 mousePoint = Input.mousePosition;
-
-        
-        mousePoint.z = mZCoord;
-
-        return Camera.main.ScreenToWorldPoint(mousePoint);
-
+        Ray ray = Camera.main.ScreenPointToRay(mousePoint);
+        return ray;
     }
 
-    private void OnMouseDrag()
-    {
-        /*transform.position = GetMouseWorldPos() + mOffset;*/
-        gameObject.transform.localPosition = Camera.main.ScreenToWorldPoint(new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10));
-    }
 
     void Start()
     {
-       
         
+
 
     }
 
