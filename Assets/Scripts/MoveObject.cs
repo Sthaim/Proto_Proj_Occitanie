@@ -10,7 +10,7 @@ public class MoveObject : MonoBehaviour
 
     private void OnMouseDown()
     {
-        InvokeRepeating("chiant", 0F, 0.5F);
+        InvokeRepeating("chiant", 0F, 0.1F);
         
     }
 
@@ -36,7 +36,7 @@ public class MoveObject : MonoBehaviour
                 selectedCube.addWaypoint(go);
             }
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
     }
 
 

@@ -23,16 +23,20 @@ public class Cube : MonoBehaviour
     {
         Waypoint.Add(gameObj);
         lineList.positionCount = Waypoint.Count;
-        if (Waypoint.Count == 0) return;
-        for(int i = 0; i < lineList.positionCount; i--)
+        for(int i = 0; i < lineList.positionCount; i++)
         {
-            Debug.Log(Waypoint[i].transform.position);
             lineList.SetPosition(i,Waypoint[i].transform.position);
 
         }
     }
     public void removeWaypoint()
     {
+        lineList.positionCount = Waypoint.Count;
+        for (int i = 0; i < lineList.positionCount; i++)
+        {
+            lineList.SetPosition(i, Waypoint[i].transform.position);
+
+        }
         Waypoint[0].SetActive(false);
         Destroy(Waypoint[0]);
         Waypoint.RemoveAt(0);
