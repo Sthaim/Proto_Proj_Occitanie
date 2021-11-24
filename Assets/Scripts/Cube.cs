@@ -10,7 +10,7 @@ public class Cube : MonoBehaviour
     private void Update()
     {
         if (Waypoint.Count> 0) {
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Waypoint[0].transform.position, 0.05f);
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Waypoint[0].transform.position, 0.01f);
             if (gameObject.transform.position == Waypoint[0].transform.position)
             {
                 removeWaypoint();
