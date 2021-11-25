@@ -5,13 +5,20 @@ public class MoveObject : MonoBehaviour
 {
     public GameObject spawnobj;
 
-    public Cube selectedCube;
+    private Cube selectedCube;
+
+    private GameObject[] listTag;
 
 
     private void OnMouseDown()
     {
-        InvokeRepeating("chiant", 0F, 0.1F);
-        
+        listTag = GameObject.FindGameObjectsWithTag("Selected");
+        if (listTag.Length > 0)
+        {
+            Debug.Log("oui");
+            selectedCube = listTag[0].GetComponent<Cube>();
+            InvokeRepeating("chiant", 0F, 0.1F);
+        }
     }
 
     private void OnMouseUp()
@@ -50,7 +57,16 @@ public class MoveObject : MonoBehaviour
 
     void Start()
     {
-        
+        listTag = GameObject.FindGameObjectsWithTag("Selected");
+        if (listTag.Length > 0)
+        {
+            selectedCube = listTag[0].GetComponent<Cube>();
+        }
+        /*foreach (GameObject objet in )
+        {
+
+        }*/
+
 
 
     }
