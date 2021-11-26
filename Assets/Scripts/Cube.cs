@@ -7,6 +7,8 @@ public class Cube : MonoBehaviour
     public List<GameObject> Waypoint;
     public LineRenderer prefabLineRend;
     private GameObject[] listTag;
+    public float Offset;
+    private Vector3 offsetPos;
 
     private void Start()
     {
@@ -14,9 +16,10 @@ public class Cube : MonoBehaviour
     }
     private void Update()
     {
-        if (Waypoint.Count> 0) {
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Waypoint[0].transform.position, 0.01f);
-            if (gameObject.transform.position == Waypoint[0].transform.position)
+        if (Waypoint.Count> 1) {
+            offsetPos = new Vector3(Waypoint[0].transform.position.x, Waypoint[0].transform.position.y + Offset, Waypoint[0].transform.position.z);
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, offsetPos, 0.01f);
+            if (gameObject.transform.position == offsetPos)
             {
                 removeWaypoint();
             }
@@ -37,7 +40,7 @@ public class Cube : MonoBehaviour
 
         gameObject.tag = "Selected";
         gameObject.GetComponent<Renderer>().material.color = Color.blue;
-        gameObject.GetComponent<Cube>().prefabLineRend.SetColors(Color.blue, Color.blue);
+        gameObject.GetComponent<Cube>().prefabLineRend.SetColors(Color.black, Color.green);
     }
 
     public void addWaypoint(GameObject gameObj)
@@ -52,13 +55,15 @@ public class Cube : MonoBehaviour
     }
     public void removeWaypoint()
     {
+        
         Debug.Log(gameObject.name);
-        prefabLineRend.positionCount = Waypoint.Count;
-        for (int i = 0; i < prefabLineRend.positionCount; i++)
+        Vector3[] newPositions = new Vector3[prefabLineRend.positionCount - 1];
+/*        Destroy(prefabLineRend.GetPosition(0).gameObject);*/
+        for (int i = 0; i < newPositions.Length; i++)
         {
-            prefabLineRend.SetPosition(i, Waypoint[i].transform.position);
-
+            newPositions[i] = prefabLineRend.GetPosition(i + 1);
         }
+        prefabLineRend.SetPositions(newPositions);
         Waypoint[0].SetActive(false);
         Destroy(Waypoint[0]);
         Waypoint.RemoveAt(0);
