@@ -7,23 +7,27 @@ public class Cube : MonoBehaviour
     public List<GameObject> Waypoint;
     public LineRenderer prefabLineRend;
     private GameObject[] listTag;
+    private bool onlyOne;
     public float Offset;
     private Vector3 offsetPos;
 
     private void Start()
     {
         prefabLineRend=Instantiate(prefabLineRend, new Vector3(0, 0, 0), Quaternion.identity);
+        onlyOne = true;
     }
     private void Update()
     {
-        if (Waypoint.Count> 1) {
+        if (Waypoint.Count > 0 && onlyOne == false) {
             offsetPos = new Vector3(Waypoint[0].transform.position.x, Waypoint[0].transform.position.y + Offset, Waypoint[0].transform.position.z);
             gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, offsetPos, 0.01f);
             if (gameObject.transform.position == offsetPos)
             {
                 removeWaypoint();
             }
+            Debug.Log(Waypoint.Count);
         }
+        
         
     }
 
@@ -45,6 +49,10 @@ public class Cube : MonoBehaviour
 
     public void addWaypoint(GameObject gameObj)
     {
+        if (Waypoint.Count == 1)
+        { 
+            onlyOne = false;
+        }
         Waypoint.Add(gameObj);
         prefabLineRend.positionCount = Waypoint.Count;
         for(int i = 0; i < prefabLineRend.positionCount; i++)
@@ -52,6 +60,11 @@ public class Cube : MonoBehaviour
             prefabLineRend.SetPosition(i,Waypoint[i].transform.position);
 
         }
+    }
+
+    public bool getBoolOnly()
+    {
+        return onlyOne;
     }
     public void removeWaypoint()
     {
@@ -67,6 +80,11 @@ public class Cube : MonoBehaviour
         Waypoint[0].SetActive(false);
         Destroy(Waypoint[0]);
         Waypoint.RemoveAt(0);
+        if (Waypoint.Count == 0)
+        {
+            onlyOne = true;
+            Debug.Log("saucise");
+        }
 
     }
 }

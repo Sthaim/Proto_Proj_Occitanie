@@ -24,16 +24,12 @@ public class MoveObject : MonoBehaviour
 
     private void OnMouseDown()
     {
+        
         listTag = GameObject.FindGameObjectsWithTag("Selected");
         if (listTag.Length > 0)
         {
             selectedCube = listTag[0].GetComponent<Cube>();
             listCube = selectedCube.GetComponent<Cube>().Waypoint;
-            for (int i =0; i < listCube.Count; i++)
-            {
-                Destroy(listCube[i]);
-            }
-            listCube.Clear();
             InvokeRepeating("Coroutine", 0F, 0.1F);
         }
     }
@@ -42,7 +38,16 @@ public class MoveObject : MonoBehaviour
     {
         CancelInvoke("Coroutine");
         StopCoroutine(launchMove());
-        FinTrait();
+        if (selectedCube != null)
+        {
+            FinTrait();
+            if (selectedCube.getBoolOnly() == true)
+            {
+                selectedCube.removeWaypoint();
+            }
+            
+        }
+
     }
 
     private void Coroutine()
