@@ -12,6 +12,8 @@ public class MoveObject : MonoBehaviour
 
     private List<GameObject> listCube;
 
+    private int nbrIteration;
+
 
     void Start()
     {
@@ -20,6 +22,7 @@ public class MoveObject : MonoBehaviour
         {
             selectedCube = listTag[0].GetComponent<Cube>();
         }
+        nbrIteration = 0;
     }
 
     private void OnMouseDown()
@@ -36,17 +39,22 @@ public class MoveObject : MonoBehaviour
 
     private void OnMouseUp()
     {
+        nbrIteration = 0;
         CancelInvoke("Coroutine");
         StopCoroutine(launchMove());
         if (selectedCube != null)
         {
-            FinTrait();
-            if (selectedCube.getBoolOnly() == true)
+            if (nbrIteration < 1)
             {
                 selectedCube.removeWaypoint();
             }
+            else
+            {
+                FinTrait();
+            }
             
         }
+        nbrIteration = 0;
 
     }
 
@@ -64,6 +72,16 @@ public class MoveObject : MonoBehaviour
             {
                 GameObject go = Instantiate(spawnobj, hit.point, Quaternion.identity);
                 selectedCube.addWaypoint(go);
+                nbrIteration++;
+                Debug.Log(nbrIteration);
+                if (nbrIteration == 2)
+                {
+                    for (int i = 0; i < listCube.Count - 2; i++)
+                    {
+                        selectedCube.removeWaypoint();
+                        Debug.Log("Fun");
+                    }
+                }
             }
         }
         yield return new WaitForSeconds(0.5f);
@@ -76,6 +94,15 @@ public class MoveObject : MonoBehaviour
         {
             if (hit.collider != null && hit.collider.tag == "Plane")
             {
+                nbrIteration++;
+                if (nbrIteration == 2)
+                {
+                    for (int i = 0; i < listCube.Count - 2; i++)
+                    {
+                        selectedCube.removeWaypoint();
+                        Debug.Log("Fun");
+                    }
+                }
                 GameObject go = Instantiate(spawnobj, hit.point, Quaternion.identity);
                 selectedCube.addWaypoint(go);
             }
