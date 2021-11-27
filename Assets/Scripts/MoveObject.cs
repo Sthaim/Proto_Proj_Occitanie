@@ -22,7 +22,7 @@ public class MoveObject : MonoBehaviour
         {
             selectedCube = listTag[0].GetComponent<Cube>();
         }
-        nbrIteration = 0;
+        nbrIteration = 0; 
     }
 
     private void OnMouseDown()
@@ -34,19 +34,24 @@ public class MoveObject : MonoBehaviour
             selectedCube = listTag[0].GetComponent<Cube>();
             listCube = selectedCube.GetComponent<Cube>().Waypoint;
             InvokeRepeating("Coroutine", 0F, 0.1F);
+            selectedCube.UpdateBoolBeenMoving(true);
+            if (listCube.Count > 2)
+            {
+                selectedCube.UpdateBoolFirst(false);
+            }
         }
-    }
+        
+}
 
     private void OnMouseUp()
     {
-        nbrIteration = 0;
         CancelInvoke("Coroutine");
         StopCoroutine(launchMove());
         if (selectedCube != null)
         {
-            if (nbrIteration < 1)
+            if (nbrIteration < 2)
             {
-                selectedCube.removeWaypoint();
+                selectedCube.removeWaypoint(listCube.Count-1);
             }
             else
             {
@@ -56,6 +61,7 @@ public class MoveObject : MonoBehaviour
         }
         nbrIteration = 0;
 
+        
     }
 
     private void Coroutine()
@@ -73,15 +79,7 @@ public class MoveObject : MonoBehaviour
                 GameObject go = Instantiate(spawnobj, hit.point, Quaternion.identity);
                 selectedCube.addWaypoint(go);
                 nbrIteration++;
-                Debug.Log(nbrIteration);
-                if (nbrIteration == 2)
-                {
-                    for (int i = 0; i < listCube.Count - 2; i++)
-                    {
-                        selectedCube.removeWaypoint();
-                        Debug.Log("Fun");
-                    }
-                }
+                selectedCube.UpdateIteration(nbrIteration);
             }
         }
         yield return new WaitForSeconds(0.5f);
@@ -95,14 +93,10 @@ public class MoveObject : MonoBehaviour
             if (hit.collider != null && hit.collider.tag == "Plane")
             {
                 nbrIteration++;
-                if (nbrIteration == 2)
-                {
-                    for (int i = 0; i < listCube.Count - 2; i++)
-                    {
-                        selectedCube.removeWaypoint();
-                        Debug.Log("Fun");
-                    }
-                }
+                selectedCube.UpdateIteration(nbrIteration);
+
+                
+
                 GameObject go = Instantiate(spawnobj, hit.point, Quaternion.identity);
                 selectedCube.addWaypoint(go);
             }
