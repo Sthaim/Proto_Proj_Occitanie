@@ -34,11 +34,6 @@ public class MoveObject : MonoBehaviour
             selectedCube = listTag[0].GetComponent<Cube>();
             listCube = selectedCube.GetComponent<Cube>().Waypoint;
             InvokeRepeating("Coroutine", 0F, 0.1F);
-            selectedCube.UpdateBoolBeenMoving(true);
-            if (listCube.Count > 2)
-            {
-                selectedCube.UpdateBoolFirst(false);
-            }
         }
         
 }

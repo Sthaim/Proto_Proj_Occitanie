@@ -11,16 +11,12 @@ public class Cube : MonoBehaviour
     private Vector3 offsetPos;
     private int nbrIte;
     private int dernierCount;
-    private bool beenMoving;
-    private bool firstMov;
     private bool moving;
     public Vector3 dernierePos;
 
     private void Start()
     {
         prefabLineRend=Instantiate(prefabLineRend, new Vector3(0, 0, 0), Quaternion.identity);
-        firstMov = true;
-        beenMoving = false;
     }
 
     private void Update()
@@ -39,18 +35,16 @@ public class Cube : MonoBehaviour
                 removeWaypoint(0);
             }
         }
-        if (nbrIte == 1 && Waypoint.Count > 2 && beenMoving==true && firstMov==false && moving == true)
+        if (nbrIte == 2 && Waypoint.Count > 2 && moving == true)
         {
             Debug.Log("SupprDerniereLigne");
             int count = Waypoint.Count;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count-2; i++)
             {
                 removeWaypoint(0);
             }
-            UpdateBoolBeenMoving(false);
-            
         }
-        if (nbrIte > 1)
+        if (nbrIte > 2 )
         {
             moving = true;
         }
@@ -61,17 +55,6 @@ public class Cube : MonoBehaviour
     {
         nbrIte = ite;
     }
-
-    public void UpdateBoolBeenMoving(bool move)
-    {
-        beenMoving = move;
-    }
-
-    public void UpdateBoolFirst(bool first)
-    {
-        firstMov = first;
-    }
-
 
     private void OnMouseDown()
     {
