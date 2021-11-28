@@ -66,33 +66,36 @@ public class MoveObject : MonoBehaviour
 
     IEnumerator launchMove()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(GetMouseWorldPos().origin, GetMouseWorldPos().direction, out hit))
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(GetMouseWorldPos().origin, GetMouseWorldPos().direction, 100f);
+        for (int i = 0; i < hits.Length; i++)
         {
-            if (hit.collider != null && hit.collider.tag == "Plane")
+            if (hits[i].collider != null && hits[i].collider.tag == "Plane")
             {
-                GameObject go = Instantiate(spawnobj, hit.point, Quaternion.identity);
+                GameObject go = Instantiate(spawnobj, hits[i].point, Quaternion.identity);
                 selectedCube.addWaypoint(go);
                 nbrIteration++;
                 selectedCube.UpdateIteration(nbrIteration);
             }
         }
+        
         yield return new WaitForSeconds(0.5f);
     }
 
     private void FinTrait()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(GetMouseWorldPos().origin, GetMouseWorldPos().direction, out hit))
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(GetMouseWorldPos().origin, GetMouseWorldPos().direction, 100f);
+        for (int i = 0; i < hits.Length; i++)
         {
-            if (hit.collider != null && hit.collider.tag == "Plane")
+            if (hits[0].collider != null && hits[0].collider.tag == "Plane")
             {
                 nbrIteration++;
                 selectedCube.UpdateIteration(nbrIteration);
 
                 
 
-                GameObject go = Instantiate(spawnobj, hit.point, Quaternion.identity);
+                GameObject go = Instantiate(spawnobj, hits[0].point, Quaternion.identity);
                 selectedCube.addWaypoint(go);
             }
         }

@@ -12,7 +12,7 @@ public class Cube : MonoBehaviour
     private int nbrIte;
     private int dernierCount;
     private bool moving;
-    public Vector3 dernierePos;
+    private Vector3 dernierePos;
 
     private void Start()
     {
@@ -24,6 +24,12 @@ public class Cube : MonoBehaviour
         if (Waypoint.Count > 0 && dernierCount>0) {
             offsetPos = new Vector3(Waypoint[0].transform.position.x, Waypoint[0].transform.position.y + Offset, Waypoint[0].transform.position.z);
             dernierePos = gameObject.transform.position;
+
+            var lookPos = offsetPos - transform.position;
+            lookPos.y = 0;
+            var rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation=Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10);
+
             gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, offsetPos, 0.01f);
             if (gameObject.transform.position== dernierePos)
             {
@@ -65,11 +71,20 @@ public class Cube : MonoBehaviour
             cube.tag = "Untagged";
             cube.GetComponent<Renderer>().material.color = Color.white;
             cube.GetComponent<Cube>().prefabLineRend.SetColors ( Color.white, Color.white);
+            foreach (Renderer variableName in cube.GetComponentsInChildren<Renderer>())
+            {
+                variableName.material.color = Color.white;
+            }
         }
 
         gameObject.tag = "Selected";
         gameObject.GetComponent<Renderer>().material.color = Color.blue;
         gameObject.GetComponent<Cube>().prefabLineRend.SetColors(Color.black, Color.green);
+        foreach (Renderer variableName in GetComponentsInChildren<Renderer>())
+        {
+            variableName.material.color = Color.blue;
+        }
+
     }
 
     public void addWaypoint(GameObject gameObj)
@@ -107,5 +122,18 @@ public class Cube : MonoBehaviour
         Waypoint[index].SetActive(false);
         Destroy(Waypoint[index]);
         Waypoint.RemoveAt(index);
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            collision.gameObject.SetActive(false);
+            int count = Waypoint.Count;
+            for (int i = 0; i < count;i++)
+            {
+                removeWaypoint(0);
+            }
+        }
     }
 }
