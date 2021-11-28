@@ -30,7 +30,8 @@ public class Cube : MonoBehaviour
             var rotation = Quaternion.LookRotation(lookPos);
             transform.rotation=Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10);
 
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, offsetPos, 0.01f);
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, offsetPos, Time.deltaTime * 2f);
+
             if (gameObject.transform.position== dernierePos)
             {
                 moving = false;
