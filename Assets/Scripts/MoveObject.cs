@@ -106,6 +106,7 @@ public class MoveObject : MonoBehaviour
     {
         Vector3 mousePoint = Input.mousePosition;
         Ray ray = Camera.main.ScreenPointToRay(mousePoint);
+        Debug.DrawRay(ray.origin,ray.direction,Color.white);
         return ray;
     }
 
